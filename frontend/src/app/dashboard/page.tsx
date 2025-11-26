@@ -158,7 +158,7 @@ export default function DashboardPage() {
                                     <CardContent>
                                         <div className="flex justify-between text-sm">
                                             <span className="font-semibold">${req.budget}</span>
-                                            <span className="text-muted-foreground">{req.location}</span>
+                                            <span className="text-muted-foreground">{typeof req.location === 'string' ? req.location : req.location || 'N/A'}</span>
                                         </div>
                                         <div className="mt-4 flex justify-between items-center">
                                             <div className="flex gap-2">
@@ -168,8 +168,8 @@ export default function DashboardPage() {
                                                 </span>
                                                 {req.campaign_status && (
                                                     <span className={`text-xs px-2 py-1 rounded-full border ${req.campaign_status.status === 'ACTIVE' ? 'border-purple-500/50 text-purple-400 bg-purple-500/10' :
-                                                            req.campaign_status.status === 'FAILED' ? 'border-red-500/50 text-red-400 bg-red-500/10' :
-                                                                'border-yellow-500/50 text-yellow-400 bg-yellow-500/10'
+                                                        req.campaign_status.status === 'FAILED' ? 'border-red-500/50 text-red-400 bg-red-500/10' :
+                                                            'border-yellow-500/50 text-yellow-400 bg-yellow-500/10'
                                                         }`}>
                                                         Campaign: {req.campaign_status.status}
                                                     </span>

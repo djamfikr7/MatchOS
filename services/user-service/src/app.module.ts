@@ -18,7 +18,7 @@ import { EventsModule } from './events/events.module';
       database: process.env.POSTGRES_DB || 'matchos_db',
       entities: [User],
       synchronize: true,
-      dropSchema: true, // Wipe and recreate schema to fix enum conflicts
+      dropSchema: false, // Keep schema persistent
     }),
     UsersModule,
     AuthModule,

@@ -30,7 +30,7 @@ exports.AppModule = AppModule = __decorate([
                 database: process.env.POSTGRES_DB || 'matchos_db',
                 entities: [user_entity_1.User],
                 synchronize: true,
-                dropSchema: true,
+                dropSchema: false,
             }),
             users_module_1.UsersModule,
             auth_module_1.AuthModule,

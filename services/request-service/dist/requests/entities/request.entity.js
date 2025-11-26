@@ -32,7 +32,6 @@ let Request = class Request {
     category_id;
     title;
     description;
-    embedding;
     temporal_type;
     deadline;
     penalty_rate;
@@ -68,10 +67,6 @@ __decorate([
     (0, typeorm_1.Column)('text'),
     __metadata("design:type", String)
 ], Request.prototype, "description", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'vector', length: 1536, nullable: true }),
-    __metadata("design:type", Array)
-], Request.prototype, "embedding", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         type: 'enum',

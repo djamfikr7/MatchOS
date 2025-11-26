@@ -17,7 +17,6 @@ export declare class Request {
     category_id: string;
     title: string;
     description: string;
-    embedding: number[];
     temporal_type: TemporalType;
     deadline: Date;
     penalty_rate: number;

@@ -24,36 +24,49 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
         const token = localStorage.getItem("token")
         if (!token) return
 
-        const socketInstance = io("http://localhost:3001", {
-            auth: {
-                token: `Bearer ${token}`,
-            },
-        })
-
-        socketInstance.on("connect", () => {
-            setIsConnected(true)
-            console.log("Socket connected")
-        })
-
-        socketInstance.on("disconnect", () => {
-            setIsConnected(false)
-            console.log("Socket disconnected")
-        })
-
-        socketInstance.on("matchFound", (data: any) => {
-            toast.success("New Match Found!", {
-                description: `Provider ${data.providerId} matches your request!`,
-                action: {
-                    label: "View",
-                    onClick: () => console.log("Navigate to match"),
+        try {
+            const socketInstance = io("http://localhost:3001", {
+                auth: {
+                    token: `Bearer ${token}`,
                 },
+                reconnection: true,
+                reconnectionAttempts: 3,
+                reconnectionDelay: 1000,
             })
-        })
 
-        setSocket(socketInstance)
+            socketInstance.on("connect", () => {
+                setIsConnected(true)
+                console.log("Socket connected")
+            })
 
-        return () => {
-            socketInstance.disconnect()
+            socketInstance.on("disconnect", () => {
+                setIsConnected(false)
+                console.log("Socket disconnected")
+            })
+
+            socketInstance.on("connect_error", (error) => {
+                console.warn("WebSocket connection error:", error.message)
+                setIsConnected(false)
+            })
+
+            socketInstance.on("matchFound", (data: any) => {
+                toast.success("New Match Found!", {
+                    description: `Provider ${data.providerId} matches your request!`,
+                    action: {
+                        label: "View",
+                        onClick: () => console.log("Navigate to match"),
+                    },
+                })
+            })
+
+            setSocket(socketInstance)
+
+            return () => {
+                socketInstance.disconnect()
+            }
+        } catch (error) {
+            console.error("Failed to initialize WebSocket:", error)
+            setIsConnected(false)
         }
     }, [])
 

@@ -26,7 +26,7 @@ export const authService = {
     },
 
     register: async (email: string, password: string) => {
-        const response = await userApi.post('/auth/register', { email, password, role: 'requester' });
+        const response = await userApi.post('/auth/register', { email, password, role: 'user' });
         if (response.data.access_token) {
             localStorage.setItem('token', response.data.access_token);
             localStorage.setItem('user', JSON.stringify(response.data.user));

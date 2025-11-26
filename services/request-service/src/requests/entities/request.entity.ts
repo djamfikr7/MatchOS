@@ -34,8 +34,9 @@ export class Request {
     description: string;
 
     // AI Embeddings for Semantic Search
-    @Column({ type: 'vector', length: 1536, nullable: true })
-    embedding: number[];
+    // TODO: Enable after installing pgvector extension
+    // @Column({ type: 'vector', length: 1536, nullable: true })
+    // embedding: number[];
 
     // Temporal Intelligence
     @Column({
