@@ -1,0 +1,11 @@
+{
+    "email": "ai_provider@matchos.com",
+    "password": "password123",
+    "role": "provider",
+    "skills": [
+        "python",
+        "ai",
+        "machine learning",
+        "data science"
+    ]
+}

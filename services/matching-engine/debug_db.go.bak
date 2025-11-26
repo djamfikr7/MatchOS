@@ -1,0 +1,60 @@
+package main
+
+import (
+	"fmt"
+	"log"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+type User struct {
+	ID    string `gorm:"primaryKey;type:uuid"`
+	Email string
+	Role  string
+}
+
+func (User) TableName() string {
+	return "users"
+}
+
+type Request struct {
+	ID string `gorm:"primaryKey;type:uuid"`
+}
+
+func (Request) TableName() string {
+	return "requests"
+}
+
+func main() {
+	dsn := "host=localhost user=matchos password=devpass dbname=matchos_db port=5433 sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+
+	var users []User
+	result := db.Find(&users)
+	if result.Error != nil {
+		log.Fatal("Failed to fetch users:", result.Error)
+	}
+
+	fmt.Println("Users found:", len(users))
+
+	var requests []Request
+	// Try 'request' table
+	if err := db.Table("request").Find(&requests).Error; err != nil {
+		fmt.Println("Failed to fetch from 'request':", err)
+	} else {
+		fmt.Println("Requests found in 'request':", len(requests))
+	}
+
+	// List all tables
+	var tables []string
+	db.Raw("SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'").Scan(&tables)
+	fmt.Println("All tables:", tables)
+
+	for _, u := range users {
+		fmt.Printf("ID: %s, Email: %s, Role: %s\n", u.ID, u.Email, u.Role)
+	}
+}

@@ -1,0 +1,51 @@
+{
+    "category_id": "services.legal.saudi",
+    "name": "Legal Consultation (KSA)",
+    "activation_rules": {
+        "triggers": [
+            "lawyer",
+            "license",
+            "sharia_compliance"
+        ],
+        "required_docs": [
+            "saudi_bar_license",
+            "identity"
+        ],
+        "privacy_defaults": {
+            "requester": "ghost_mode",
+            "provider": "semi_private",
+            "transaction": "encrypted"
+        }
+    },
+    "ai_campaigns": {
+        "ad_copy_template": "⚖️ Legal Consultation: {user_location}\n🔒 Privacy: {privacy_level}\n💼 Case Type: {case_type}\n\n✅ Sharia Compliant | ✅ Confidential | ✅ Verified Lawyers\n\n👇 Click to consult: {deep_link}",
+        "platforms": [
+            "linkedin",
+            "twitter",
+            "whatsapp_business"
+        ],
+        "posting_schedule": "daily_morning",
+        "auto_respond_keywords": [
+            "consult",
+            "fees",
+            "appointment"
+        ]
+    },
+    "reputation_weights": {
+        "confidentiality": 0.40,
+        "outcome_rate": 0.35,
+        "responsiveness": 0.15,
+        "professionalism": 0.10
+    },
+    "privacy_defaults": {
+        "requester": "ghost_mode",
+        "provider": "semi_private",
+        "transaction": "encrypted"
+    },
+    "ai_mediation_prompt": "You are a Sharia-compliant legal mediator. REDACT: All personal identifiers, case specifics. PRESERVE: Legal question category, urgency, budget. NEGOTIATE: Consultation fees anonymously. OUTPUT: Halal-certified fee structure.",
+    "fraud_signals": [
+        "fake_bar_license",
+        "unregistered_practice",
+        "confidentiality_breach"
+    ]
+}

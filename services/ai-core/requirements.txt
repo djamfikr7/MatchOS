@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+pydantic
+scikit-learn
+numpy
+fastapi
+uvicorn
+pydantic
+scikit-learn
+langchain-openai
+numpy
+langchain
+openai
+pgvector
+psycopg2-binary
+python-dotenv
+requests

@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.db
+    image: matchos/db:latest
+    container_name: matchos_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-matchos}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-devpass}
+      POSTGRES_DB: ${POSTGRES_DB:-matchos_db}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - matchos_net
+
+  redis:
+    image: redis:7-alpine
+    container_name: matchos_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - matchos_net
+
+  minio:
+    image: minio/minio
+    container_name: matchos_minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - matchos_net
+
+  user-service:
+    build: ../services/user-service
+    container_name: matchos_user_service
+    ports:
+      - "3001:3001"
+    environment:
+      DATABASE_URL: postgresql://matchos:devpass@postgres:5432/matchos_db
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - matchos_net
+
+  request-service:
+    build: ../services/request-service
+    container_name: matchos_request_service
+    ports:
+      - "3002:3002"
+    environment:
+      DATABASE_URL: postgresql://matchos:devpass@postgres:5432/matchos_db
+      SOCIAL_BOT_URL: http://social-bot:3005
+    depends_on:
+      - postgres
+      - social-bot
+    networks:
+      - matchos_net
+
+  matching-engine:
+    build: ../services/matching-engine
+    container_name: matchos_matching_engine
+    ports:
+      - "3003:3003"
+    environment:
+      DATABASE_URL: postgresql://matchos:devpass@postgres:5432/matchos_db
+      AI_CORE_URL: http://ai-core:3004
+    depends_on:
+      - postgres
+      - ai-core
+    networks:
+      - matchos_net
+
+  ai-core:
+    build: ../services/ai-core
+    container_name: matchos_ai_core
+    ports:
+      - "3004:3004"
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    networks:
+      - matchos_net
+
+  social-bot:
+    build: ../services/social-bot-orchestrator
+    container_name: matchos_social_bot
+    environment:
+      AI_CORE_URL: http://ai-core:3004
+    ports:
+      - "3005:3005"
+    networks:
+      - matchos_net
+
+  blockchain-adapter:
+    build: ../services/blockchain-adapter
+    container_name: matchos_blockchain
+    ports:
+      - "3008:3008"
+    environment:
+      PORT: 3008
+      RPC_URL: ${RPC_URL}
+      ADMIN_PRIVATE_KEY: ${ADMIN_PRIVATE_KEY}
+      CONTRACT_ADDRESS: ${CONTRACT_ADDRESS}
+    networks:
+      - matchos_net
+
+  admin-panel:
+    build: ../services/admin-panel
+    container_name: matchos_admin
+    ports:
+      - "3006:3006"
+    volumes:
+      - ../services/admin-panel:/app
+      - /app/node_modules
+    networks:
+      - matchos_net
+
+networks:
+  matchos_net:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:

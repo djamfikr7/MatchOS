@@ -1,0 +1,51 @@
+{
+    "category_id": "services.home.algeria",
+    "name": "Home Services (Algeria)",
+    "activation_rules": {
+        "triggers": [
+            "plumber",
+            "electrician",
+            "repair"
+        ],
+        "required_docs": [
+            "trade_license",
+            "insurance"
+        ],
+        "privacy_defaults": {
+            "requester": "alias",
+            "provider": "public",
+            "transaction": "public"
+        }
+    },
+    "ai_campaigns": {
+        "ad_copy_template": "🔧 Urgent Service Needed: {service_type}\n📍 Location: {neighborhood}\n⏱️ Time: {time_window}\n💰 Budget: {budget} DZD\n\n✅ Verified Pros | ✅ Insured | ✅ Fast Response\n\n👇 Click to apply: {deep_link}",
+        "platforms": [
+            "facebook_groups",
+            "telegram_channels",
+            "tiktok"
+        ],
+        "posting_schedule": "immediate",
+        "auto_respond_keywords": [
+            "available",
+            "quote",
+            "location"
+        ]
+    },
+    "reputation_weights": {
+        "punctuality": 0.30,
+        "quality": 0.30,
+        "safety": 0.25,
+        "price_transparency": 0.15
+    },
+    "privacy_defaults": {
+        "requester": "alias",
+        "provider": "public",
+        "transaction": "public"
+    },
+    "ai_mediation_prompt": "You are a home service dispatcher. REDACT: Exact address until booking confirmed. PRESERVE: Neighborhood, service type, urgency. NEGOTIATE: Service call fee and hourly rate. OUTPUT: Standardized quote.",
+    "fraud_signals": [
+        "no_insurance",
+        "fake_reviews",
+        "price_gouging"
+    ]
+}

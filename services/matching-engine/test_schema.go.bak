@@ -1,0 +1,71 @@
+package main
+
+import (
+	"fmt"
+	"log"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+type User struct {
+	ID    string
+	Email string
+	Role  string
+}
+
+func (User) TableName() string {
+	return "users"
+}
+
+func main() {
+	dsn := "host=localhost user=matchos password=devpass dbname=matchos_db port=5433 sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal("Failed to connect to database:", err)
+	}
+
+	// Get table schema
+	fmt.Println("=== Table Schema for 'users' ===")
+	var columns []struct {
+		ColumnName string
+		DataType   string
+	}
+	db.Raw("SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'users' ORDER BY ordinal_position").Scan(&columns)
+	for _, col := range columns {
+		fmt.Printf("Column: %s, Type: %s\n", col.ColumnName, col.DataType)
+	}
+
+	// Get all users
+	fmt.Println("\n=== All Users ===")
+	var users []User
+	result := db.Find(&users)
+	if result.Error != nil {
+		log.Fatal("Failed to fetch users:", result.Error)
+	}
+	fmt.Printf("Total users: %d\n", len(users))
+	for _, u := range users {
+		fmt.Printf("ID: %s, Email: %s, Role: '%s'\n", u.ID, u.Email, u.Role)
+	}
+
+	// Try filtering by role
+	fmt.Println("\n=== Users with role='provider' ===")
+	var providers []User
+	result = db.Where("role = ?", "provider").Find(&providers)
+	if result.Error != nil {
+		log.Fatal("Failed to fetch providers:", result.Error)
+	}
+	fmt.Printf("Providers found: %d\n", len(providers))
+	for _, p := range providers {
+		fmt.Printf("ID: %s, Email: %s, Role: '%s'\n", p.ID, p.Email, p.Role)
+	}
+
+	// Try raw SQL
+	fmt.Println("\n=== Raw SQL Query ===")
+	var rawUsers []User
+	db.Raw("SELECT id, email, role FROM users WHERE role = 'provider'").Scan(&rawUsers)
+	fmt.Printf("Raw query providers: %d\n", len(rawUsers))
+	for _, u := range rawUsers {
+		fmt.Printf("ID: %s, Email: %s, Role: '%s'\n", u.ID, u.Email, u.Role)
+	}
+}

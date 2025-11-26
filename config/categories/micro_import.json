@@ -1,0 +1,50 @@
+{
+    "category_id": "goods.import.micro.algeria",
+    "name": "Micro-Importation (Algeria)",
+    "activation_rules": {
+        "triggers": [
+            "unemployed",
+            "CASNOS",
+            "foreign currency"
+        ],
+        "required_docs": [
+            "self_employed_card",
+            "passport",
+            "bank_account"
+        ],
+        "max_transaction_value": 1800000,
+        "compliance_framework": "dz_executive_decree_25_170"
+    },
+    "ai_campaigns": {
+        "ad_copy_template": "🛫 Micro-Importation Opportunity: {user_location}\n💰 Budget: {budget} DZD\n📍 Destination: {destination}\n🎯 Product: {product}\n⏱️ Travel Date: {travel_date}\n\n✅ Legal | ✅ Profitable | ✅ Government-Approved\n\n👇 Click to fulfill: {deep_link}",
+        "platforms": [
+            "whatsapp_status",
+            "facebook_groups",
+            "telegram_channels"
+        ],
+        "posting_schedule": "every_6_hours",
+        "auto_respond_keywords": [
+            "interested",
+            "price",
+            "available"
+        ]
+    },
+    "reputation_weights": {
+        "customs_success_rate": 0.30,
+        "delivery_speed": 0.25,
+        "product_authenticity": 0.25,
+        "communication": 0.20
+    },
+    "privacy_defaults": {
+        "requester": "semi_private",
+        "provider": "public",
+        "transaction": "public"
+    },
+    "ai_mediation_prompt": "You are a micro-importation procurement agent. REDACT: Names, exact locations, passport numbers. PRESERVE: Product specs, budget, timeline, customs codes. NEGOTIATE: Prices with suppliers in Turkey/China/UAE. OUTPUT: Sanitized quotes with supplier references.",
+    "fraud_signals": [
+        "price_below_market_30_percent",
+        "no_BEA_account_verification",
+        "duplicate_passport_numbers",
+        "destination_risk_country"
+    ]
+}
