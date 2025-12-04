@@ -88,6 +88,9 @@ export class Request {
     @Column({ type: 'jsonb', nullable: true })
     campaign_status: any;
 
+    @Column({ type: 'jsonb', nullable: true })
+    dynamic_data: any;
+
     @CreateDateColumn({ type: 'timestamptz' })
     created_at: Date;
 

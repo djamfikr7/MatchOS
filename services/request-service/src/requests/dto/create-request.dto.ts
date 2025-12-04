@@ -4,4 +4,5 @@ export class CreateRequestDto {
     location: string;
     budget: number;
     userId: string;
+    dynamic_data?: any;
 }

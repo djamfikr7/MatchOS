@@ -74,6 +74,10 @@ export class User {
     @Column({ type: 'jsonb', nullable: true })
     availability_schedule: any;
 
+    // Wallet & Credits
+    @Column({ type: 'integer', default: 0 })
+    credits: number;
+
     @CreateDateColumn({ type: 'timestamptz' })
     created_at: Date;
 

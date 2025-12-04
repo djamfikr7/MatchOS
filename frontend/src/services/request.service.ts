@@ -6,6 +6,7 @@ export const createRequestSchema = z.object({
     description: z.string().min(10),
     location: z.string().min(2),
     budget: z.coerce.number().positive(),
+    dynamic_data: z.any().optional(),
 });
 
 export type CreateRequestData = z.infer<typeof createRequestSchema>;

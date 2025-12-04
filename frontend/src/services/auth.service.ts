@@ -44,8 +44,13 @@ export const authService = {
         return userStr ? JSON.parse(userStr) : null;
     },
 
+    getToken: () => {
+        return localStorage.getItem('token');
+    },
+
     mintReputation: async (walletAddress: string) => {
         const response = await userApi.post('/users/mint-reputation', { walletAddress });
         return response.data;
     },
 };
+

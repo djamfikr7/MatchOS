@@ -23,39 +23,46 @@ async function seedCategories() {
           name, 
           slug, 
           type, 
-          ai_prompt, 
-          privacy_default, 
-          reputation_weights, 
-          fraud_signals
+          form_schema,
+          ui_config
         )
-        VALUES ($1, $2, 'core', $3, 2, $4, $5)
+        VALUES ($1, $2, $3, $4, $5)
         ON CONFLICT (slug) DO UPDATE SET
-          ai_prompt = EXCLUDED.ai_prompt,
-          reputation_weights = EXCLUDED.reputation_weights,
-          fraud_signals = EXCLUDED.fraud_signals;
+          name = EXCLUDED.name,
+          form_schema = EXCLUDED.form_schema,
+          ui_config = EXCLUDED.ui_config;
       `;
 
-            // Map privacy string to int
-            const privacyMap = { 'public': 1, 'alias': 2, 'semi_private': 2, 'mediated': 3, 'ghost_mode': 4 };
-            const privacyLevel = privacyMap[config.privacy_defaults?.requester] || 2;
+            // Build form schema from config
+            const formSchema = config.form_schema || config.field_extensions || null;
+
+            // Build ui_config from config
+            const uiConfig = {
+                icon: config.icon || 'Circle',
+                color: config.color || 'blue',
+                ai_prompt: config.ai_mediation_prompt,
+                privacy_defaults: config.privacy_defaults,
+                reputation_weights: config.reputation_weights,
+                fraud_signals: config.fraud_signals,
+            };
 
             try {
                 await client.query(query, [
                     config.name,
                     config.category_id, // using category_id as slug
-                    config.ai_mediation_prompt,
-                    JSON.stringify(config.reputation_weights),
-                    JSON.stringify(config.fraud_signals)
+                    'core',
+                    formSchema ? JSON.stringify(formSchema) : null,
+                    JSON.stringify(uiConfig)
                 ]);
-                console.log(`Seeded Category: ${config.name}`);
+                console.log(`✅ Seeded Category: ${config.name}`);
             } catch (err) {
-                console.error(`Error seeding ${config.name}:`, err);
+                console.error(`❌ Error seeding ${config.name}:`, err.message);
             }
         }
     }
 
     await client.end();
-    console.log('Category Seeding Complete');
+    console.log('\n🎉 Category Seeding Complete');
 }
 
 seedCategories();

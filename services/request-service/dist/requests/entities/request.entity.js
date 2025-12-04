@@ -43,6 +43,7 @@ let Request = class Request {
     currency;
     status;
     campaign_status;
+    dynamic_data;
     created_at;
     updated_at;
 };
@@ -125,6 +126,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'jsonb', nullable: true }),
     __metadata("design:type", Object)
 ], Request.prototype, "campaign_status", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'jsonb', nullable: true }),
+    __metadata("design:type", Object)
+], Request.prototype, "dynamic_data", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ type: 'timestamptz' }),
     __metadata("design:type", Date)

@@ -28,6 +28,7 @@ export declare class Request {
     currency: string;
     status: RequestStatus;
     campaign_status: any;
+    dynamic_data: any;
     created_at: Date;
     updated_at: Date;
 }

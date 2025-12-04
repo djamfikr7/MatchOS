@@ -7,6 +7,7 @@ class CreateRequestDto {
     location;
     budget;
     userId;
+    dynamic_data;
 }
 exports.CreateRequestDto = CreateRequestDto;
 //# sourceMappingURL=create-request.dto.js.map
